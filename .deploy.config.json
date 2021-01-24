@@ -1,0 +1,7 @@
+{
+  "host": "www.crecode.cn",
+  "port": 22,
+  "localPath": "./dist",
+  "remotePath": "/root/dist",
+  "readyTimeout": 20000
+}

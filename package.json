@@ -1,0 +1,15 @@
+{
+  "name": "deploy",
+  "version": "1.0.0",
+  "description": "前端自动化压缩、上传、解压到目标服务器指定目录小工具",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "node index.js"
+  },
+  "author": "WeilinerL",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^5.2.0",
+    "ssh2": "^0.8.9"
+  }
+}
