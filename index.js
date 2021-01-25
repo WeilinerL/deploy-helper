@@ -152,7 +152,7 @@ function resolveArgs(...target) {
   return res;
 }
 
-function main() {
+function deploy() {
   // 读取node命令的参数 来获取链接远程Linux服务器的用户名和密码
   const args = resolveArgs("--username", "--password");
   // 读取用户的默认配置文件 .deploy.config.json
@@ -172,7 +172,7 @@ function main() {
         conn.shell((err, stream) => {
           if (err) throw err;
           stream.on('close', () => {
-            console.log('文件解压完毕！');
+            console.log('文件解压完毕！\n部署完成！🐢🐢🐢');
             console.log('Stream :: close');
             conn.end();
           }).on('data', (data) => {
@@ -192,4 +192,4 @@ function main() {
   });
 }
 
-main();
+module.exports = deploy;
