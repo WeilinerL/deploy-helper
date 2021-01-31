@@ -95,7 +95,7 @@ async function compress(localPath) {
   // pipe archive data to the file
   archive.pipe(output);
   await compressDir(archive, localPath);
-  archive.finalize();
+  await archive.finalize();
   return outDir;
 }
 
@@ -164,11 +164,13 @@ function deploy() {
   const conn = new Client();
   conn.on('ready', () => {
     console.log('Client :: ready');
-    compress(path.resolve(cwdPath, config.localPath)).then((outDir) => {
-      const filename = path.basename(outDir);
+    const localPath = path.resolve(cwdPath, config.localPath);
+    const folderName = path.basename(localPath);
+    compress(localPath).then((outDir) => {
+      const zipFileName = path.basename(outDir);
       let p = config.remotePath;
       p = p.replace(/\/+$/, '');
-      const remotePath = p + '/' + filename;
+      const remotePath = p + '/' + zipFileName;
       console.log(outDir, remotePath);
       uploadFile(conn, outDir, remotePath, (res) => {
         console.log('上传成功！', res === undefined ? '' : res);
@@ -183,8 +185,9 @@ function deploy() {
           }).on('data', (data) => {
             console.log('OUTPUT: ' + data);
           });
+          // TODO: mv ${folderName} ${folderName + '-' + Date.now()}
           // 进入指定文件夹解压缩文件到当前文件夹 并删除压缩包
-          stream.end(`cd ${p}\nunzip -o ${filename}\nrm -rf ${filename}\nexit\n`);
+          stream.end(`cd ${p}\nrm -rf ${folderName}\nunzip -o ${zipFileName}\nrm -rf ${zipFileName}\nexit\n`);
         });
       });
     })
