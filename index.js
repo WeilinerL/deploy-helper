@@ -54,9 +54,10 @@ function uploadFile(conn, localPath, remotePath, callback){
  * @param {*} localPath
  */
 async function compress(localPath) {
+  const folderName = path.basename(localPath);
 
   // create a file to stream archive data to.
-  const outDir = path.resolve(localPath, `${Date.now()}-dist.zip`);
+  const outDir = path.resolve(localPath, '../', `${folderName}.zip`);
   const output = fs.createWriteStream(outDir);
   const archive = archiver('zip', {
     zlib: { level: 9 } // Sets the compression level.
@@ -153,8 +154,11 @@ function resolveArgs(...target) {
 }
 
 function deploy() {
+  console.log("🚀🚀🚀 start deploying...");
+
   // 读取node命令的参数 来获取链接远程Linux服务器的用户名和密码
   const args = resolveArgs("--username", "--password");
+
   // 读取用户的默认配置文件 .deploy.config.json
   const config = readConfigFile();
   const conn = new Client();
@@ -167,21 +171,20 @@ function deploy() {
       const remotePath = p + '/' + filename;
       console.log(outDir, remotePath);
       uploadFile(conn, outDir, remotePath, (res) => {
-        console.log('上传成功！', res);
+        console.log('上传成功！', res === undefined ? '' : res);
         console.log('开始解压文件...');
+        // 执行shell脚本命令
         conn.shell((err, stream) => {
           if (err) throw err;
           stream.on('close', () => {
-            console.log('文件解压完毕！\n部署完成！🐢🐢🐢');
             console.log('Stream :: close');
+            console.log('文件解压完毕！\n部署完成！🐢🐢🐢');
             conn.end();
           }).on('data', (data) => {
             console.log('OUTPUT: ' + data);
           });
-          // 进入指定文件夹解压缩文件到当前文件夹
-          stream.end(`
-            cd ${p}\nunzip ${filename}\nexit\n`
-          );
+          // 进入指定文件夹解压缩文件到当前文件夹 并删除压缩包
+          stream.end(`cd ${p}\nunzip -o ${filename}\nrm -rf ${filename}\nexit\n`);
         });
       });
     })

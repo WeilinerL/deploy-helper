@@ -39,5 +39,7 @@ npm install @weilinerl/deploy-helper -D
 npm run deploy --username=${你的远程服务器的登录用户名} --password=${你的远程服务器的登录密码}
 ```
 
-发布完成后会在服务器的remotePath文件夹中生成相应的文件，命名方式为``` `${Date.now()}-dist` ```，
-同时在本地配置的localPath文件夹中的生成相应的压缩文件，命名方式同上
+发布完成后会在服务器的remotePath文件夹中生成相应的文件（夹），
+同时在本地配置的localPath文件夹中的生成相应的压缩文件（夹），文件名即为要上传的文件（夹）的文件（夹）名。
+
+**注意！ 你的远程文件会被直接覆盖，将不会保留上一个版本，请做好备份谨慎使用！**
