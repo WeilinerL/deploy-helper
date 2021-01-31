@@ -3,5 +3,6 @@
   "port": 22,
   "localPath": "./dist",
   "remotePath": "/root/dist",
-  "readyTimeout": 20000
+  "readyTimeout": 20000,
+  "shellScripts": "cd next-myspace \n kill -9 $(netstat -tlnp | grep 3000 | awk '{print $7}' | awk -F '/' '{print $1}') && npm run build && npm run start"
 }

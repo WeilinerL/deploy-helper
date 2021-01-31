@@ -183,11 +183,13 @@ function deploy() {
             console.log('文件解压完毕！\n部署完成！🐢🐢🐢');
             conn.end();
           }).on('data', (data) => {
-            console.log('OUTPUT: ' + data);
+            console.log('OUTPUT: ' + data.slice(0, 100));
           });
           // TODO: mv ${folderName} ${folderName + '-' + Date.now()}
           // 进入指定文件夹解压缩文件到当前文件夹 并删除压缩包
-          stream.end(`cd ${p}\nrm -rf ${folderName}\nunzip -o ${zipFileName}\nrm -rf ${zipFileName}\nexit\n`);
+          // 执行自定义脚本
+          const scripsts = config.shellScripts === undefined ? '' : config.shellScripts;
+          stream.end(`cd ${p}\nrm -rf ${folderName}\njar xvf ${zipFileName}&&rm -rf ${zipFileName}\n${scripsts}\nexit\n`);
         });
       });
     })
