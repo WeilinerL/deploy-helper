@@ -1,6 +1,6 @@
 {
   "name": "@weilinerl/deploy-helper",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "前端自动化压缩、上传、解压到目标服务器指定目录小工具",
   "main": "index.js",
   "scripts": {
