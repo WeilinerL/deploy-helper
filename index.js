@@ -11,23 +11,14 @@ const cwdPath = process.cwd();
 const configPlainText = readFileSync(path.resolve(__dirname, '.config.json'));
 const CONFIG = JSON.parse(configPlainText);
 
-
 /**
  * 读取项目的发布配置文件
  *
  * @return {*} 
  */
 function readConfigFile() {
-  const configPlainText = readFileSync(path.resolve(cwdPath, CONFIG.CONFIG_FILE_NAME));
-  let config = {};
-  try {
-    config = JSON.parse(configPlainText);
-  } catch(e) {
-    throw new SyntaxError(`${CONFIG.CONFIG_FILE_NAME} 文件解析错误`);
-  }
-  return config;
+  return require(path.resolve(cwdPath, CONFIG.CONFIG_FILE_NAME));
 }
-
 
 /**
  * 上传文件
@@ -182,9 +173,8 @@ function deploy() {
             console.log('Stream :: close');
             console.log('文件解压完毕！\n部署完成！🐢🐢🐢');
             conn.end();
-          }).on('data', (data) => {
-            console.log('OUTPUT: ' + data.slice(0, 100));
           });
+          stream.pipe(process.stdout)
           // TODO: mv ${folderName} ${folderName + '-' + Date.now()}
           // 进入指定文件夹解压缩文件到当前文件夹 并删除压缩包
           // 执行自定义脚本
