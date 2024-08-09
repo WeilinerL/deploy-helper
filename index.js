@@ -125,12 +125,7 @@ function compressDir(archive, dir) {
  * @return {*} 
  */
 function resolveArgs(...target) {
-  let args;
-  try {
-    args = JSON.parse(process.env.npm_config_argv).original
-  } catch(e) {
-    throw new Error(e);
-  }
+  const args = process.argv.slice(2)
   const res = {};
   target.forEach((field) => {
     args.forEach((arg, index) => {
