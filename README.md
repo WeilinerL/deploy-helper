@@ -36,7 +36,7 @@ npm install @weilinerl/deploy-helper -D
 项目执行打包构建命令后会在根目录生成相应的文件夹，只需要在.deploy.config.json文件中配置好打包后的本地文件的文件夹相对目录localPath，然后执行以下命令即可
 
 ```
-npm run deploy --username=${你的远程服务器的登录用户名} --password=${你的远程服务器的登录密码}
+npm run deploy -- --username=${你的远程服务器的登录用户名} --password=${你的远程服务器的登录密码}
 ```
 
 发布完成后会在服务器的remotePath文件夹中生成相应的文件（夹），
