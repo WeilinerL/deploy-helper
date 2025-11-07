@@ -31,7 +31,10 @@ function readConfigFile() {
 function uploadFile(conn, localPath, remotePath, callback){
   conn.sftp((err, sftp) => {
     if (err) throw err;
-    sftp.fastPut(localPath, remotePath, function(err, result) {
+    sftp.fastPut(localPath, remotePath, {
+      concurrency: 4,
+      chunkSize: 32768
+    }, function(err, result) {
       if (err) throw err;
       callback(result)
     });
